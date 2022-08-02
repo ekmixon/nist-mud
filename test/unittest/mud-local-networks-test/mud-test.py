@@ -58,9 +58,8 @@ class TestAccess(unittest.TestCase) :
     def runAndReturnOutput(self, host, command ):
         output = host.cmdPrint(command)
         retval = re.search('\[rc=(.+?)\]',output)
-        pieces = retval.group(0).split('=')
-        rc = pieces[1].split(']')[0]
-        return rc
+        pieces = retval[0].split('=')
+        return pieces[1].split(']')[0]
 
     def testContactLocalHostFromPrinterExpectFail(self):
         h1 = hosts[0]
@@ -80,7 +79,7 @@ class TestAccess(unittest.TestCase) :
     def testContactExternalHostFromPrinterExpectPass(self):
         h1 = hosts[0]
         result = h1.cmdPrint("wget www.nist.local:800 --no-cache -O foo.html --delete-after --tries 2")
-        print ("result " + str(result))
+        print(f"result {str(result)}")
         self.assertTrue(re.search("100",result) != None, "Expecting a successful get")
 
     def tearDown(self):

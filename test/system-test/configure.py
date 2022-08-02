@@ -13,8 +13,8 @@ if __name__=="__main__":
         ("controllerclass-mapping.json","nist-mud-controllerclass-mapping:controllerclass-mapping")
         }:
         data = json.load(open(configfile))
-        print ("configfile " + configfile)
-        url = "http://" + controller_addr + ":8181/restconf/config/" + suffix
-        print ("url " + url)
+        print(f"configfile {configfile}")
+        url = f"http://{controller_addr}:8181/restconf/config/{suffix}"
+        print(f"url {url}")
         r = requests.put(url, data=json.dumps(data), headers=headers , auth=('admin', 'admin'))
-        print ("response " +  str(r))
+        print(f"response {str(r)}")

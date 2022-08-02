@@ -11,7 +11,7 @@ global timeoutCount
 global quiet
 
 
-def udp_client(host, port) :
+def udp_client(host, port):
     # Create a UDP socket
     # Notice the use of SOCK_DGRAM for UDP packets
     global timeoutCount
@@ -27,17 +27,17 @@ def udp_client(host, port) :
     clientSocket.bind(('',port))
     for i in range(10):
         sendTime = time.time()
-        message = 'PING ' + str(i + 1) + " " + str(time.strftime("%H:%M:%S"))
+        message = f'PING {str(i + 1)} ' + str(time.strftime("%H:%M:%S"))
         if not quiet:
-           print(message)           
+           print(message)
         clientSocket.sendto(message, remoteAddr)
-    
+
         try:
             data, server = clientSocket.recvfrom(1024)
             recdTime = time.time()
             rtt = recdTime - sendTime
             if not quiet:
-                print ( "RTT = " + str(rtt) )
+                print(f"RTT = {str(rtt)}")
         except timeout:
             if not quiet:
                 print ( "UDPPING FAILED " )

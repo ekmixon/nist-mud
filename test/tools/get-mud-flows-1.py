@@ -12,18 +12,16 @@ def is_part(some_string, target):
 
 # Dynamically pull logs when you are unaware of the MUD URL.
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     url =  "http://127.0.0.1:8181/restconf/operations/sdnmud:get-mud-urls"
     headers= {"Content-Type":"application/json"}
-    argmap = {}
     innerMap = {}
-    #innerMap["mud-uri"] = ["https://inside.nist.gov/foobar"]
-    argmap["input"] = innerMap
+    argmap = {"input": innerMap}
     jsonStr = json.dumps(argmap, indent=4)
     print(jsonStr)
     while True:
         r = requests.post(url,headers=headers , auth=('admin', 'admin'), data=jsonStr)
-        print("r = " + str(r.content))
+        print(f"r = {str(r.content)}")
         if r.content ==  b'{"output":{}}':
             time.sleep(10)
             continue
@@ -34,7 +32,7 @@ if __name__ == "__main__" :
     time.sleep(10)
     # OK if we got so far, we can get the log
     url = "http://127.0.0.1:8181/restconf/operations/sdnmud:get-mud-urls"
-    print("jsonStr " + jsonStr)
+    print(f"jsonStr {jsonStr}")
     #r = requests.post(url,headers=headers , auth=('admin', 'admin'),data=jsonStr)
     print("Pulling the logs.")
     while True:
@@ -44,13 +42,11 @@ if __name__ == "__main__" :
             js = json.loads(r.content)
             print("*************************************************")
             print(json.dumps(js,indent=4))
-            # TODO -- pull all the reports in. For now just one.
-            if "report" in js["output"] :
-                innerMap["mud-url"] = [js["output"]["report"]["mud-url"]]
-                time.sleep(10)
-            else:
+            if "report" not in js["output"]:
                 break
+            innerMap["mud-url"] = [js["output"]["report"]["mud-url"]]
+            time.sleep(10)
         except:
             print(r.content)
-        
+
     print("Done")

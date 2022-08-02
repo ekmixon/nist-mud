@@ -10,19 +10,17 @@ import ast
 def is_part(some_string, target):
     return target in some_string
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-m", help="metadata mask  ")
     args = parser.parse_args()
     srcmac = args.m
-    if srcmac == None :
-       print("Please provide metadata mask.")
-       sys.exit()
+    if srcmac is None:
+        print("Please provide metadata mask.")
+        sys.exit()
 
-    argmap = {}
-    innerMap = {}
-    innerMap["mud-url"] = srcmac
-    argmap["input"] = innerMap
+    innerMap = {"mud-url": srcmac}
+    argmap = {"input": innerMap}
     jsonStr = json.dumps(argmap, indent=4)
     print(jsonStr)
     url =  "http://127.0.0.1:8181/restconf/operations/sdnmud:add-controller-wait-input"

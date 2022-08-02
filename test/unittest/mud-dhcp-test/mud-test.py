@@ -37,8 +37,7 @@ class TestAccess(unittest.TestCase) :
         h2 = hosts[1]
         h2.cmdPrint("ifconfig h2-eth0 0")
         h2.cmdPrint("dhclient -cf /etc/dhcp/dhclient.conf.toaster")
-	time.sleep(10)
-        pass
+        time.sleep(10)
 
     def tearDown(self):
 	time.sleep(3)
@@ -46,9 +45,8 @@ class TestAccess(unittest.TestCase) :
     def runAndReturnOutput(self, host, command ):
         output = host.cmdPrint(command)
         retval = re.search('\[rc=(.+?)\]',output)
-        pieces = retval.group(0).split('=')
-        rc = pieces[1].split(']')[0]
-        return rc
+        pieces = retval[0].split('=')
+        return pieces[1].split(']')[0]
 
 
     def testAccessControl(self):

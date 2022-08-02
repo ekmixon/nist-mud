@@ -105,7 +105,7 @@ def setupTopology(controller_addr, n_hosts):
 
 
 
-def communicate(avgSleepTime=10, npings=10) :
+def communicate(avgSleepTime=10, npings=10):
     global _hosts
     global _result
     global _doneFlag
@@ -116,7 +116,7 @@ def communicate(avgSleepTime=10, npings=10) :
 
     destaddr = []
     n_hosts = len(_hosts)
-    for i in range(0,len(_hosts)):
+    for i in range(len(_hosts)):
         addr = _hosts[i].cmdPrint("hostname -I").strip()
         destaddr.append(addr)
 
@@ -127,14 +127,12 @@ def communicate(avgSleepTime=10, npings=10) :
         dest = random.randint(0,n_hosts -1)
         while dest == source :
             dest = random.randint(0,n_hosts-1)
-        print "src = " +  _hosts[source].name + " dst = " + _hosts[dest].name
+        source = random.randint(0, n_hosts -1)
         lambd = 1.0/avgSleepTime
         sleeptime = random.expovariate(lambd)
         time.sleep(sleeptime)
-        res = _hosts[source].cmdPrint("ping " + destaddr[dest]  + " -c " +str(npings) + " -q " )
-        print res.split("received, ")[1]
-        
- 
+        res = _hosts[source].cmdPrint(f"ping {destaddr[dest]} -c {str(npings)} -q ")
+        source = random.randint(0, n_hosts -1)
         loss =  int(res.split("received, ")[1].split("%")[0])
 
         _packetsSent = _packetsSent + npings
@@ -145,17 +143,15 @@ def communicate(avgSleepTime=10, npings=10) :
 
 
 def mode(data):
-    lst =[]
     hgh=0
-    for i in range(len(data)):
-        lst.append(data.count(data[i]))
+    lst = [data.count(data[i]) for i in range(len(data))]
     m= max(lst)
     ml = [x for x in data if data.count(x)==m ] #to find most frequent values
     mode = []
     for x in ml: #to remove duplicates of mode
         if x not in mode:
            mode.append(x)
-    return mode[0] if len(mode) > 0 else None
+    return mode[0] if mode else None
         
 
 def sampleTableSize() :

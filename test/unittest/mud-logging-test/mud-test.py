@@ -40,13 +40,13 @@ class TestAccess(unittest.TestCase) :
     def runAndReturnOutput(self, host, command ):
         output = host.cmdPrint(command)
         retval = re.search('\[rc=(.+?)\]',output)
-        pieces = retval.group(0).split('=')
-        rc = pieces[1].split(']')[0]
-        return rc
+        pieces = retval[0].split('=')
+        return pieces[1].split(']')[0]
 
     def sendMessageToServer(self):
-        output = host.cmdPrint("python ../util/tcp-client.py --port 8000 --host 10.0.0.8 --delete-after")
-        return output
+        return host.cmdPrint(
+            "python ../util/tcp-client.py --port 8000 --host 10.0.0.8 --delete-after"
+        )
     
     def testNonIotHostHttpGetExpectPass(self):
         h4 = hosts[3]

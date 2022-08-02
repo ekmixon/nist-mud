@@ -34,7 +34,6 @@ class TestAccess(unittest.TestCase) :
 
     def setUp(self):
         time.sleep(10)
-        pass
 
     def tearDown(self):
         pass
@@ -42,9 +41,8 @@ class TestAccess(unittest.TestCase) :
     def runAndReturnOutput(self, host, command ):
         output = host.cmdPrint(command)
         retval = re.search('\[rc=(.+?)\]',output)
-        pieces = retval.group(0).split('=')
-        rc = pieces[1].split(']')[0]
-        return rc
+        pieces = retval[0].split('=')
+        return pieces[1].split(']')[0]
 
 
     def testAccessControl(self):
